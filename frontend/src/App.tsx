@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react'
 function App() {
   const [note, setNote] = useState('')
   const [notes, setNotes] = useState<string[]>([])
+  const [error, setError] = useState<string|null>(null);
 
   // fetch all notes
   const fetchNotes = async () => {
@@ -16,14 +17,19 @@ function App() {
 
   // add a new note
   const addNote = async () => {
-    if (!note.trim()) return
+    //if (!note.trim()) return
 
-    await fetch('http://localhost:3001/notes', {
+    const res= await fetch('http://localhost:3001/notes', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ note })
     })
-
+    const data = await res.json();
+    if (!res.ok){
+      setError(data.error);
+      return;
+    }    
+    setError(null);
     setNote('')
     fetchNotes()
   }
@@ -36,6 +42,15 @@ function App() {
   return (
     <div style={{ padding: 40 }}>
       <h1>Notes</h1>
+      {error && (
+        <div style= {{
+          padding:10,
+          background: "#ffe6e6",
+          color: "#a00"
+        }}>
+          {error}
+        </div>
+      )}
 
       <input
         value={note}

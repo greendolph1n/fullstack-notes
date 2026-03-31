@@ -16,6 +16,9 @@ app.post('/notes', (req,res) => {
     console.log("post hit");
     
     const{note} = req.body;
+    if (!note || !note.trim()){
+        return res.status(400).json({"error" : "note cannot be empty"});
+    }
     notes.push(note);
     res.json({success: true});
 });
