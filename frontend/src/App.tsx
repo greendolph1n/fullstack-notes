@@ -7,12 +7,16 @@ function App() {
   const [note, setNote] = useState('')
   const [notes, setNotes] = useState<string[]>([])
   const [error, setError] = useState<string|null>(null);
+  const [loading, setLoading] = useState(false);
 
   // fetch all notes
   const fetchNotes = async () => {
+    setLoading(true);
     const res = await fetch('http://localhost:3001/notes')
     const data = await res.json()
     setNotes(data)
+
+    setLoading(false);
   }
 
   // add a new note
@@ -60,6 +64,7 @@ function App() {
 
       <button onClick={addNote}>Add</button>
 
+      {loading && <p>Loading...</p>}
       <ul>
         {notes.map((n, i) => (
           <li key={i}>{n}</li>

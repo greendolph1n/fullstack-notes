@@ -7,7 +7,7 @@ app.use(express.json());
 
 let notes: string[] = [];
 
-app.get("/notes", (req,res) =>{
+app.get("/notes", async (req,res) =>{
     console.log("get hit");
     res.json(notes);
 });
