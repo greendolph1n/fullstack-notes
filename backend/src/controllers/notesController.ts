@@ -2,6 +2,9 @@ import {Request, Response} from 'express'
 import {pool} from '../db.js'
 import {Note} from '../../../shared/types/note.js'
 
+type UpdateNoteBody = {
+    content: string;
+};
 
 export const getNotes = async (req: Request, res: Response) =>{
     const result = await pool.query('SELECT * FROM notes');
@@ -30,3 +33,30 @@ export const addNote = async (req: Request, res: Response) => {
     }
 
 }
+
+export const updateNote = async (
+    req: Request<{id: string}, {}, UpdateNoteBody>,
+    res: Response
+)=> {
+    console.log('UPDATE HIT', req.params.id, req.body);
+    const id = Number(req.params.id);
+    const {content} = req.body;
+
+    if (!content || !content.trim()){
+        return res.status(400).json({error:'Content cannot be empty'});
+    }
+
+    try {
+        const result = await pool.query(
+            'UPDATE notes SET content = $1 WHERE id = $2 RETURNING id, content;', [content, id]
+        );
+        if (result.rowCount === 0){
+            return res.status(400).json({error:'note not found'});
+        }
+        const updatedNote: Note = result.rows[0];
+        return res.json(updatedNote);
+    } catch (err){
+        console.error(err);
+        return res.status(500).json({error:'failed to update note'});
+    }
+};
