@@ -1,7 +1,6 @@
-import React from 'react';
 import './App.css';
 import { useState, useEffect } from 'react'
-import type { Note } from '../../shared/types/note';
+import type { Note } from '@shared/types/note';
 
 function App() {
   const [note, setNote] = useState('')

@@ -1,5 +1,6 @@
 import {Request, Response} from 'express'
 import {pool} from '../db.js'
+import {Note} from '../../../shared/types/note.js'
 
 
 export const getNotes = async (req: Request, res: Response) =>{
@@ -20,7 +21,7 @@ export const addNote = async (req: Request, res: Response) => {
             'INSERT INTO notes (content) VALUES ($1) RETURNING id, content',
             [note]
         );
-        const createdNote = result.rows[0];
+        const createdNote: Note = result.rows[0];
         console.log("added", note);
         return res.status(201).json(createdNote);
     } catch (err) {

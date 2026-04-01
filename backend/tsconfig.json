@@ -1,14 +1,18 @@
 {
   // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
+      "baseUrl": ".",
+      "paths": {
+        "@shared/*": ["../shared/*"]
+      },
     // File Layout
     // "rootDir": "./src",
     // "outDir": "./dist",
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "module": "ESnext",
+    "moduleResolution": "Bundler",
     "target": "esnext",
     "types": [],
     // For nodejs:
@@ -42,4 +46,5 @@
     "moduleDetection": "force",
     "skipLibCheck": true
   }
+  
 }
