@@ -1,8 +1,7 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import { useState, useEffect } from 'react'
-import {Note} from './types/note.js'
+import type { Note } from '../../shared/types/note';
 
 function App() {
   const [note, setNote] = useState('')
@@ -68,11 +67,11 @@ function App() {
       <button onClick={addNote}>Add</button>
 
       {loading && <p>Loading...</p>}
-      <ul>
-        {notes.map((n) => (
-          <li key={n.id}>{n.content}</li>
-        ))}
-      </ul>
+        <ul style={{ listStylePosition: 'inside', textAlign: 'center' }}>
+          {notes.map((n) => (
+            <li key={n.id}>{n.content}</li>
+          ))}
+        </ul>
     </div>
   )
 }

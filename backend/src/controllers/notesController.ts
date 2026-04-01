@@ -25,7 +25,7 @@ export const addNote = async (req: Request, res: Response) => {
         return res.status(201).json(createdNote);
     } catch (err) {
         console.error(err);
-        res.status(500).json({error: 'failed to add note'});
+        res.status(500).json({error: 'failed to add note, check DB connection'});
     }
 
 }
