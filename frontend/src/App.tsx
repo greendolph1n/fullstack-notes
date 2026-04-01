@@ -2,19 +2,21 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { useState, useEffect } from 'react'
+import {Note} from './types/note.js'
 
 function App() {
   const [note, setNote] = useState('')
-  const [notes, setNotes] = useState<string[]>([])
+  const [notes, setNotes] = useState<Note[]>([]);
   const [error, setError] = useState<string|null>(null);
   const [loading, setLoading] = useState(false);
 
   // fetch all notes
   const fetchNotes = async () => {
     setLoading(true);
-    const res = await fetch('http://localhost:3001/notes')
-    const data = await res.json()
-    setNotes(data)
+    const res = await fetch('http://localhost:3001/notes');
+    const data = await res.json();
+    setNotes(data);
+    console.log(data);
 
     setLoading(false);
   }
@@ -34,8 +36,9 @@ function App() {
       return;
     }    
     setError(null);
-    setNote('')
-    fetchNotes()
+    setNote('');
+
+    setNotes((prev) => [...prev, data]);
   }
 
   // run once on load
@@ -66,8 +69,8 @@ function App() {
 
       {loading && <p>Loading...</p>}
       <ul>
-        {notes.map((n, i) => (
-          <li key={i}>{n}</li>
+        {notes.map((n) => (
+          <li key={n.id}>{n.content}</li>
         ))}
       </ul>
     </div>

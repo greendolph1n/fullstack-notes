@@ -1,28 +1,14 @@
 import express from 'express';
 import cors from 'cors';
+import notesRoutes from './routes/notes.js';
+import './db';
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-let notes: string[] = [];
+app.use('/notes', notesRoutes);
 
-app.get("/notes", async (req,res) =>{
-    console.log("get hit");
-    res.json(notes);
-});
-
-app.post('/notes', (req,res) => {
-    console.log("post hit");
-    
-    const{note} = req.body;
-    if (!note || !note.trim()){
-        return res.status(400).json({"error" : "note cannot be empty"});
-    }
-    notes.push(note);
-    res.json({success: true});
-});
-
-app.listen(3001, ()=> {
-    console.log("listening on port 3001");
+app.listen(3001, () => {
+  console.log('listening on port 3001');
 });
