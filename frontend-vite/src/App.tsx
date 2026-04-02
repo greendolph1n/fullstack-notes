@@ -1,12 +1,14 @@
 import './App.css';
 import { useState, useEffect } from 'react'
 import type { Note } from '@shared/types/note';
+import NoteItem from './components/NoteItem';
 
 function App() {
-  const [note, setNote] = useState('')
+  const [note, setNote] = useState('');
   const [notes, setNotes] = useState<Note[]>([]);
   const [error, setError] = useState<string|null>(null);
   const [loading, setLoading] = useState(false);
+  const [editContent, setEditContent] = useState('');
 
   // fetch all notes
   const fetchNotes = async () => {
@@ -39,6 +41,28 @@ function App() {
     setNotes((prev) => [...prev, data]);
   }
 
+  const updateNote = async (id: number, content: string) => {
+    const res = await fetch(`http://localhost:3001/notes/${id}`, {
+      method: 'PUT',
+      headers:{
+        'Content-Type':'application/json'
+      },
+      body:JSON.stringify({content: content.trim()})
+    });
+
+    if (!res.ok){
+      const data = await res.json();
+      setError(data.error)
+      return;
+    }
+    const data: Note = await res.json();
+    setError(null);
+    setNotes((prev) => prev.map((note)=>{
+      if (note.id === data.id) return data;
+      return note;
+    }));
+  }
+
   // run once on load
   useEffect(() => {
     fetchNotes()
@@ -68,7 +92,7 @@ function App() {
       {loading && <p>Loading...</p>}
         <ul style={{ listStylePosition: 'inside', textAlign: 'center' }}>
           {notes.map((n) => (
-            <li key={n.id}>{n.content}</li>
+            <NoteItem key={n.id} note={n} onUpdate={updateNote}/>
           ))}
         </ul>
     </div>
