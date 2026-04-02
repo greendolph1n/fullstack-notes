@@ -39,7 +39,7 @@ npm install
 npm run dev
 ```
 
-Test endpoint example:
+Test endpoints (example):
 ```
 curl -X PUT http://localhost:3001/notes/1 \
   -H "Content-Type: application/json" \
