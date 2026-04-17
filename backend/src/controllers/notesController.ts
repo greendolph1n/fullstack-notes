@@ -60,3 +60,23 @@ export const updateNote = async (
         return res.status(500).json({error:'failed to update note'});
     }
 };
+
+export const deleteNote = async (
+    req: Request<{id: string}>,
+    res: Response
+) => {
+    console.log("delete hit")
+    const id = Number(req.params.id);
+    try {
+        const result = await pool.query(
+            'DELETE from notes WHERE id = $1 RETURNING id;', [id]
+        )
+        if (result.rowCount === 0){
+            return res.status(404).json({error:'id not found'});
+        }
+        res.json(result.rows[0])
+    }catch(err){
+        console.error(err);
+        return res.status(500).json({error: 'failed to delete note'});
+    }
+};

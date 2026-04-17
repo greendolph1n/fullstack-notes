@@ -63,6 +63,21 @@ function App() {
     }));
   }
 
+  const deleteNote = async (id: number) => {
+    console.log("DELETE CLICKED")
+    const res = await fetch (`http://localhost:3001/notes/${id}`, {
+      method: 'DELETE',
+    });
+
+    if(!res.ok){
+      const data = await res.json();
+      setError(data.error);
+      return;
+    }
+    setNotes((prev) => prev.filter((n) => n.id !== id));
+    setError(null);
+  }
+
   // run once on load
   useEffect(() => {
     fetchNotes()
@@ -92,7 +107,7 @@ function App() {
       {loading && <p>Loading...</p>}
         <ul style={{ listStylePosition: 'inside', textAlign: 'center' }}>
           {notes.map((n) => (
-            <NoteItem key={n.id} note={n} onUpdate={updateNote}/>
+            <NoteItem key={n.id} note={n} onUpdate={updateNote} onDelete = {deleteNote}/>
           ))}
         </ul>
     </div>

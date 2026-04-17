@@ -4,9 +4,10 @@ import { useState, useEffect } from 'react'
 interface Props {
     note: Note;
     onUpdate: (id: number, content: string) => void;
+    onDelete: (id: number) => void;
 };
 
-export default function NoteItem({note, onUpdate}: Props){
+export default function NoteItem({note, onUpdate, onDelete}: Props){
     const [editContent, setEditContent] = useState(note.content);
     const [isEditing, setIsEditing] = useState(false);
 
@@ -31,8 +32,15 @@ export default function NoteItem({note, onUpdate}: Props){
                     setIsEditing(false);
                 }
             }}>{isEditing? 'Save': 'Edit'}</button>    
+            {!isEditing && 
+            <button type ="button" onClick ={() => onDelete(note.id)}>Delete</button>
+            }
             {isEditing && (
-                <button onClick={()=> setIsEditing(false)}>Cancel</button>
+                <button type = "button" onClick={()=> {
+                    setEditContent("");
+                    setIsEditing(false)
+                }
+            }>Cancel</button>
             )}        
         </li>
     )
